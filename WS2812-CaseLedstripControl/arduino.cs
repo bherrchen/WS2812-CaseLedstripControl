@@ -14,6 +14,7 @@ namespace caseledstripcontrol
         private SerialPort arduinoBoard = new SerialPort();
         public String versionFromArduino;
         private bool comPortOpen;
+        public patternList patternList = new patternList();
         
 
         public arduino()
@@ -102,5 +103,38 @@ namespace caseledstripcontrol
                 arduinoBoard.WriteLine(ledStripArray.ToString());
             }
         }
+    }
+
+    public class patternList
+    {
+        public struct ledPattern
+        {
+            public int id;
+            public string name;
+            public string description;
+            public int command;
+         
+
+            public ledPattern(int id, string name, string description, int command) : this()
+            {
+                this.id = id;
+                this.name = name;
+                this.description = description;
+                this.command = command;
+            }
+        }
+
+        public List<ledPattern> ledPatternList = new List<ledPattern>();
+        private List<String> ledPatternNames = new List<String> {"boot", "white", "black", "rainbow", "rainbowWithGlitter", "confetti", "sinelon", "juggle", "bpm", "razerRainbow" };
+
+
+        public patternList()
+        {
+            for (int x=0;x<ledPatternNames.Count;x++)
+            {
+                ledPatternList.Add(new ledPattern(x, ledPatternNames[x], " ", x));
+            }
+        }
+
     }
 }

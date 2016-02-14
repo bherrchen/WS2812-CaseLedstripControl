@@ -19,9 +19,9 @@ namespace caseledstripcontrol
         private bool connectionState = false;
         private manualLEDcontrol manualLEDcontrol = new manualLEDcontrol();
         private ContextMenu trayMenu = new ContextMenu();
-        private MenuItem trayMenuItem1 = new MenuItem("Rainbow");
-        private MenuItem trayMenuItem2 = new MenuItem("White");
-        private MenuItem trayMenuItem3 = new MenuItem("Juggle");
+        private List<MenuItem> trayMenuItemsList;
+        private EventHandler[] trayMenuHandler;
+       
 
 
         public MainForm()
@@ -80,20 +80,48 @@ namespace caseledstripcontrol
 
         private void initializeTrayMenu()
         {
-            trayMenu.MenuItems.Add(trayMenuItem1);
-            trayMenu.MenuItems.Add(trayMenuItem2);
-            trayMenu.MenuItems.Add(trayMenuItem3);
+            //trayMenu.MenuItems.Add(trayMenuItem1);
+            //trayMenu.MenuItems.Add(trayMenuItem2);
+            //trayMenu.MenuItems.Add(trayMenuItem3);
+            trayMenuItemsList = new List<MenuItem>();
+
+            for (int x = 1; x <= arduino.patternList.ledPatternList.Count(); x++)
+            {
+                trayMenuItemsList.Add(new MenuItem());
+                trayMenuItemsList[x-1].Text = arduino.patternList.ledPatternList[x-1].name.ToString();
+                
+                //trayMenu.MenuItems.Add(trayMenuItemsList[x]);
+            }
+
+            foreach(var listitem in trayMenuItemsList)
+            {
+                trayMenu.MenuItems.Add(listitem);
+            }
+            foreach (MenuItem mi in trayMenu.MenuItems)
+            {
+                mi.Click += delegate (object sender, EventArgs e)
+                {
+                  arduino.SCsendCommand(trayMenu.MenuItems.IndexOf(mi), comSelected);
+                };
+
+            }
+
+
+            //trayMenuItem1.Click += new EventHandler(trayMenuItem1_Click);
+            //trayMenuItem2.Click += new EventHandler(trayMenuItem2_Click);
+            //trayMenuItem3.Click += new EventHandler(trayMenuItem3_Click);
+
             notifyIcon1.Icon = new Icon(SystemIcons.Application, 20, 20);
             notifyIcon1.ContextMenu = trayMenu;
 
-            trayMenuItem1.Click += new EventHandler(trayMenuItem1_Click);
-            trayMenuItem2.Click += new EventHandler(trayMenuItem2_Click);
-            trayMenuItem3.Click += new EventHandler(trayMenuItem3_Click);
+        }
 
-
+        private void Menuitem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
         #region tray menu event handler
-        
+
         private void trayMenuItem1_Click(object sender, EventArgs e)
         {
             arduino.SCsendCommand(09, comSelected);
