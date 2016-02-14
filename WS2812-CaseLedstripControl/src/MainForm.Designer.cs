@@ -306,7 +306,7 @@
             this.btRefresh.TabIndex = 23;
             this.btRefresh.Text = "refresh";
             this.btRefresh.UseVisualStyleBackColor = true;
-            this.btRefresh.Click += new System.EventHandler(this.button17_Click);
+            this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
             // 
             // labelVersion
             // 

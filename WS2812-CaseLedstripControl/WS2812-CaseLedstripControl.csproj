@@ -46,26 +46,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="arduino.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="src\arduino.cs" />
+    <Compile Include="src\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="src\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="manualLEDcontrol.cs">
+    <Compile Include="src\manualLEDcontrol.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="manualLEDcontrol.Designer.cs">
+    <Compile Include="src\manualLEDcontrol.Designer.cs">
       <DependentUpon>manualLEDcontrol.cs</DependentUpon>
     </Compile>
-    <Compile Include="manualStripController.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="src\manualStripController.cs" />
+    <Compile Include="src\patternList.cs" />
+    <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="manualLEDcontrol.resx">
+    <EmbeddedResource Include="src\manualLEDcontrol.resx">
       <DependentUpon>manualLEDcontrol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

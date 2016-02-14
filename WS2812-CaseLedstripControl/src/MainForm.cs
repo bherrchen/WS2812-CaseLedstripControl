@@ -20,10 +20,7 @@ namespace caseledstripcontrol
         private manualLEDcontrol manualLEDcontrol = new manualLEDcontrol();
         private ContextMenu trayMenu = new ContextMenu();
         private List<MenuItem> trayMenuItemsList;
-        private EventHandler[] trayMenuHandler;
-       
-
-
+      
         public MainForm()
         {
             InitializeComponent();
@@ -72,25 +69,17 @@ namespace caseledstripcontrol
             comboBoxCOMList.Items.Clear();
             comboBoxCOMList.Items.AddRange(SerialPort.GetPortNames());
             //ToDo: change sorting
-            comboBoxCOMList.SelectedIndex = 0;
-            //comSelected = comboBoxCOMList.SelectedItem.ToString();
-            //Console.WriteLine(comSelected);
-            
+            comboBoxCOMList.SelectedIndex = 0; 
         }
 
         private void initializeTrayMenu()
         {
-            //trayMenu.MenuItems.Add(trayMenuItem1);
-            //trayMenu.MenuItems.Add(trayMenuItem2);
-            //trayMenu.MenuItems.Add(trayMenuItem3);
             trayMenuItemsList = new List<MenuItem>();
 
             for (int x = 1; x <= arduino.patternList.ledPatternList.Count(); x++)
             {
                 trayMenuItemsList.Add(new MenuItem());
                 trayMenuItemsList[x-1].Text = arduino.patternList.ledPatternList[x-1].name.ToString();
-                
-                //trayMenu.MenuItems.Add(trayMenuItemsList[x]);
             }
 
             foreach(var listitem in trayMenuItemsList)
@@ -106,11 +95,6 @@ namespace caseledstripcontrol
 
             }
 
-
-            //trayMenuItem1.Click += new EventHandler(trayMenuItem1_Click);
-            //trayMenuItem2.Click += new EventHandler(trayMenuItem2_Click);
-            //trayMenuItem3.Click += new EventHandler(trayMenuItem3_Click);
-
             notifyIcon1.Icon = new Icon(SystemIcons.Application, 20, 20);
             notifyIcon1.ContextMenu = trayMenu;
 
@@ -120,24 +104,7 @@ namespace caseledstripcontrol
         {
             throw new NotImplementedException();
         }
-        #region tray menu event handler
-
-        private void trayMenuItem1_Click(object sender, EventArgs e)
-        {
-            arduino.SCsendCommand(09, comSelected);
-        }
-
-        private void trayMenuItem2_Click(object sender, EventArgs e)
-        {
-            arduino.SCsendCommand(01, comSelected);
-        }
-
-        private void trayMenuItem3_Click(object sender, EventArgs e)
-        {
-            arduino.SCsendCommand(07, comSelected);
-        }
-
-        #endregion tray menu event handler
+     
 
         #region UI event handlers
 
@@ -240,14 +207,12 @@ namespace caseledstripcontrol
 
         #endregion Buttons for Send Commands 0-12
 
-        private void button17_Click(object sender, EventArgs e)
+        private void btRefresh_Click(object sender, EventArgs e)
         {
 
             comboBoxCOMList.Items.Clear();
             comboBoxCOMList.Items.AddRange(SerialPort.GetPortNames());
-            //ToDo: change sorting
             comboBoxCOMList.SelectedIndex = 0;
-            //comSelected = comboBoxCOMList.SelectedItem.ToString();
             Console.WriteLine("refreshing com-list");
 
         }
