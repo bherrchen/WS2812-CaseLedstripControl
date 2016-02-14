@@ -9,29 +9,31 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 
-namespace ardustripcontrol2811
+namespace caseledstripcontrol
 {
     public partial class MainForm : Form
     {
 
-        public String comSelected;
-        public arduino arduino = new arduino();
-        public bool connectionState = false;
+        private String comSelected;
+        private arduino arduino = new arduino();
+        private bool connectionState = false;
         private manualLEDcontrol manualLEDcontrol = new manualLEDcontrol();
-
+        private ContextMenu trayMenu = new ContextMenu();
+        private MenuItem trayMenuItem1 = new MenuItem("Rainbow");
+        private MenuItem trayMenuItem2 = new MenuItem("White");
+        private MenuItem trayMenuItem3 = new MenuItem("Juggle");
 
 
         public MainForm()
         {
             InitializeComponent();
             initializeCOMList();
+            initializeTrayMenu();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
-            form_Set_Actions(false);
-            
+            form_Set_Actions(false);     
         }
 
         private void Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -61,16 +63,8 @@ namespace ardustripcontrol2811
             bt_prev.Enabled = state;
         }
 
-        private void button17_Click(object sender, EventArgs e)
-        {
-
-            comboBoxCOMList.Items.Clear();
-            comboBoxCOMList.Items.AddRange(SerialPort.GetPortNames());
-            //ToDo: change sorting
-            comboBoxCOMList.SelectedIndex = 0;
-            //comSelected = comboBoxCOMList.SelectedItem.ToString();
-            Console.WriteLine("refreshing com-list");
-           
+        public string getComSelected() {
+            return comSelected;
         }
 
         private void initializeCOMList()
@@ -83,6 +77,41 @@ namespace ardustripcontrol2811
             //Console.WriteLine(comSelected);
             
         }
+
+        private void initializeTrayMenu()
+        {
+            trayMenu.MenuItems.Add(trayMenuItem1);
+            trayMenu.MenuItems.Add(trayMenuItem2);
+            trayMenu.MenuItems.Add(trayMenuItem3);
+            notifyIcon1.Icon = new Icon(SystemIcons.Application, 20, 20);
+            notifyIcon1.ContextMenu = trayMenu;
+
+            trayMenuItem1.Click += new EventHandler(trayMenuItem1_Click);
+            trayMenuItem2.Click += new EventHandler(trayMenuItem2_Click);
+            trayMenuItem3.Click += new EventHandler(trayMenuItem3_Click);
+
+
+        }
+        #region tray menu event handler
+        
+        private void trayMenuItem1_Click(object sender, EventArgs e)
+        {
+            arduino.SCsendCommand(09, comSelected);
+        }
+
+        private void trayMenuItem2_Click(object sender, EventArgs e)
+        {
+            arduino.SCsendCommand(01, comSelected);
+        }
+
+        private void trayMenuItem3_Click(object sender, EventArgs e)
+        {
+            arduino.SCsendCommand(07, comSelected);
+        }
+
+        #endregion tray menu event handler
+
+        #region UI event handlers
 
         private void comboBoxCOMList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -181,7 +210,19 @@ namespace ardustripcontrol2811
             arduino.SCsendCommand(12);
         }
 
-        #endregion
+        #endregion Buttons for Send Commands 0-12
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+
+            comboBoxCOMList.Items.Clear();
+            comboBoxCOMList.Items.AddRange(SerialPort.GetPortNames());
+            //ToDo: change sorting
+            comboBoxCOMList.SelectedIndex = 0;
+            //comSelected = comboBoxCOMList.SelectedItem.ToString();
+            Console.WriteLine("refreshing com-list");
+
+        }
 
         private void bt_manualControl_Click(object sender, EventArgs e)
         {
@@ -210,5 +251,12 @@ namespace ardustripcontrol2811
         {
             arduino.SCsendCommand(55);
         }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+           
+        }
+
+        #endregion UI event handlers
     }
 }

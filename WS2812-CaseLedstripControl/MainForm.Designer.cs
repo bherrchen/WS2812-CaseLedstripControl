@@ -1,4 +1,4 @@
-﻿namespace ardustripcontrol2811
+﻿namespace caseledstripcontrol
 {
     partial class MainForm
     {
@@ -70,6 +70,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // bt_prev
@@ -455,6 +456,14 @@
             this.label17.TabIndex = 39;
             this.label17.Text = "razerRainbow";
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyIcon1.BalloonTipText = "CaseLedstripControl";
+            this.notifyIcon1.Text = "CaseLedstripControl";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -551,6 +560,7 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

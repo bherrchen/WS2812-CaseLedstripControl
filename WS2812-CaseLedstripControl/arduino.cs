@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 
-namespace ardustripcontrol2811
+namespace caseledstripcontrol
 {
 
     public class arduino
@@ -61,6 +61,17 @@ namespace ardustripcontrol2811
                 return true;
             }
             else { return false; }
+        }
+        public bool SCsendCommand(int command, String port)
+        {
+            if (!arduinoBoard.IsOpen)
+            {
+                
+                this.OpenArduinoConnection(port);
+                arduinoBoard.WriteLine(command.ToString());
+                return true;
+            }
+            else { arduinoBoard.WriteLine(command.ToString()); return true; }
         }
 
         public bool getVersion()

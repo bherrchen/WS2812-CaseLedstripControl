@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ardustripcontrol2811
+namespace caseledstripcontrol
 {
     public partial class manualLEDcontrol : Form
     {

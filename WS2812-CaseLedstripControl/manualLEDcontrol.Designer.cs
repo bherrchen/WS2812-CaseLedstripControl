@@ -1,4 +1,4 @@
-﻿namespace ardustripcontrol2811
+﻿namespace caseledstripcontrol
 {
     partial class manualLEDcontrol
     {
