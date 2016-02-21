@@ -247,7 +247,11 @@ namespace caseledstripcontrol
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-           
+            this.Show();
+            this.Activate();
+            this.WindowState = FormWindowState.Normal;
+            this.Focus();
+            this.BringToFront();
         }
 
         #endregion UI event handlers

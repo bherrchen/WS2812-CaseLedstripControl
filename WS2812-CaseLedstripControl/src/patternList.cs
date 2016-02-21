@@ -26,7 +26,7 @@ namespace caseledstripcontrol
         }
 
         public List<ledPattern> ledPatternList = new List<ledPattern>();
-        private List<String> ledPatternNames = new List<String> { "boot", "white", "black", "rainbow", "rainbowWithGlitter", "confetti", "sinelon", "juggle", "bpm", "razerRainbow" };
+        private List<String> ledPatternNames = new List<String> { "boot", "white", "black", "rainbow", "rainbowWithGlitter", "confetti", "sinelon", "juggle", "bpm", "razerRainbow", "fire" };
 
 
         public patternList()

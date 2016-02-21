@@ -22,6 +22,9 @@ FASTLED_USING_NAMESPACE
 #define LED_TYPE    WS2811
 #define COLOR_ORDER GRB
 #define NUM_LEDS    57
+#define CHIPSET     WS2812
+bool gReverseDirection = true;
+
 
 CRGB leftLeds[NUM_LEDS]; 
 CRGB centerLeds[NUM_LEDS];
@@ -30,6 +33,8 @@ CRGB rightLeds[NUM_LEDS];
 
 #define BRIGHTNESS         200
 #define FRAMES_PER_SECOND  120
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// VARS
 
@@ -61,7 +66,7 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { boot, white, black, rainbow, rainbowWithGlitter, confetti, sinelon, juggle, bpm, rainbow2 };
+SimplePatternList gPatterns = { boot, white, black, rainbow, rainbowWithGlitter, confetti, sinelon, juggle, bpm, rainbow2, fire };
 
 uint8_t gCurrentPatternNumber = 1; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -71,11 +76,21 @@ uint8_t max_bright = 128;
 uint8_t frequency = 50;                                       // controls the interval between strikes
 uint8_t flashes = 8;                                          //the upper limit of flashes per strike
 unsigned int dimmer = 1;
-
+uint8_t mod1;
+uint8_t mod2;
 uint8_t ledstart;                                             // Starting location of a flash
 uint8_t ledlen;   
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Patterns Setting
+// Settings for Fire2012
+
+#define COOLING  55
+#define SPARKING 120
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Main Loop
+
+
 void loop()
 {
 
@@ -197,6 +212,32 @@ void rainbow()
   fill_rainbow( leftLeds, NUM_LEDS, gHue, 5);
   fill_rainbow( centerLeds, NUM_LEDS, gHue, 5);
   fill_rainbow( rightLeds, NUM_LEDS, gHue, 5);
+    
+    /*
+    EVERY_N_MILLISECONDS(100) {
+      if (mod2 = 0) {mod2=1;}
+      else {mod2=1;}
+    }
+    
+    if (mod2 = 1) {
+      for( int i = 0; i < NUM_LEDS; i++) {
+      leftLeds[i] += CRGB::White;
+      centerLeds[i] += CRGB::White;
+      rightLeds[i] += CRGB::White; }
+    }
+    else
+    { 
+      for( int i = 0; i < NUM_LEDS; i++) {
+      leftLeds[i] = CRGB::Black;
+      centerLeds[i] = CRGB::Black;
+      rightLeds[i] = CRGB::Black; }
+
+        
+       /* fadeToBlackBy( leftLeds, 57, 255);
+        fadeToBlackBy( centerLeds, 57, 255);
+        fadeToBlackBy( rightLeds, 57, 255); */
+    
+  
 }
 
 void rainbow2(){
@@ -398,6 +439,56 @@ void juggle() {
     dothue += 32;
   }
 }
+
+
+void fire() {
+// Array of temperature readings at each simulation cell
+  static byte heat1[NUM_LEDS];
+  static byte heat2[NUM_LEDS];
+  static byte heat3[NUM_LEDS];
+
+  // Step 1.  Cool down every cell a little
+    for( int i = 0; i < NUM_LEDS; i++) {
+      heat1[i] = qsub8( heat1[i],  random8(0, ((COOLING * 10) / NUM_LEDS) + 2));
+      heat2[i] = qsub8( heat2[i],  random8(0, ((COOLING * 10) / NUM_LEDS) + 2));
+      heat3[i] = qsub8( heat3[i],  random8(0, ((COOLING * 10) / NUM_LEDS) + 2));
+    }
+  
+    // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+    for( int k= NUM_LEDS - 1; k >= 2; k--) {
+      heat1[k] = (heat1[k - 1] + heat1[k - 2] + heat1[k - 2] ) / 3;
+      heat2[k] = (heat2[k - 1] + heat2[k - 2] + heat2[k - 2] ) / 3;
+      heat3[k] = (heat3[k - 1] + heat3[k - 2] + heat3[k - 2] ) / 3;
+    }
+    
+    // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
+    if( random8() < SPARKING ) {
+      int y1 = random8(7);
+      int y2 = random8(7);
+      int y3 = random8(7);
+      heat1[y1] = qadd8( heat1[y1], random8(160,255) );
+      heat2[y2] = qadd8( heat2[y2], random8(160,255) );
+      heat3[y3] = qadd8( heat3[y3], random8(160,255) );
+    }
+
+    // Step 4.  Map from heat cells to LED colors
+    for( int j = 0; j < NUM_LEDS; j++) {
+      CRGB color1 = HeatColor( heat1[j]);
+      CRGB color2 = HeatColor( heat2[j]);
+      CRGB color3 = HeatColor( heat3[j]);
+      int pixelnumber;
+      if( gReverseDirection ) {
+        pixelnumber = (NUM_LEDS-1) - j;
+      } else {
+        pixelnumber = j;
+      }
+      leftLeds[pixelnumber] = color1;
+      centerLeds[pixelnumber] = color2;
+      rightLeds[pixelnumber] = color3;
+    }
+  
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Serial Communication
 
